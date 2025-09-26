@@ -1,0 +1,10 @@
+#pragma LIBRARY;
+#pragma NATIVE;
+#pragma FILE "gpio";
+#pragma LANGUAGE "JVM";
+
+package std;
+
+public native void turnOnLed(int pinNumber);
+public native void turnOffLed(int pinNumber);
+public native void shutdown();

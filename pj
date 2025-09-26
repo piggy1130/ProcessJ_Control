@@ -63,4 +63,5 @@ if [ $# -eq 0 ] ; then
     exit 1
 fi
 
-java -cp $installdir/bin/:$installdir/lib/JVM:$@.jar $@
+java -Dorg.slf4j.simpleLogger.defaultLogLevel=off -cp $installdir/bin/:$installdir/lib/JVM:$@.jar:/opt/pi4j/lib/'*' $@
+
