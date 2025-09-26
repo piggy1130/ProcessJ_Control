@@ -44,7 +44,7 @@ public class gpio {
 
     public static void turnOffLed(int pinNumber) {
         DigitalOutput led = getLedOutput(pinNumber);
-        System.out.println("LED low -pin NO." + pinNumber);
+        System.out.println("LED low - pin NO." + pinNumber);
         led.low();
     }
 
