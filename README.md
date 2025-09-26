@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # The ProcessJ Language
 
 A new programming language being developed at the University of Nevada, Las Vegas.
@@ -255,3 +256,15 @@ Otherwise, navigate to the ProcessJ directory and enter:
 $ ./pjc /path/to/source/coolprogram.pj
 $ ./pj coolprogram
 ```
+=======
+# ProcessJ_Control (Raspberry Pi 5)
+
+## 1. Test ".java" file could control the Raspberry PI GPIO  
+test file: LED_test.java  
+command:  
+sudo javac -classpath :/opt/pi4j/lib/* LED_test.java  
+sudo java -classpath :/opt/pi4j/lib/* LED_test  
+
+
+
+>>>>>>> 1606aa0654fc6ec4d71f523efdf3ce4ad9f6ac3c
