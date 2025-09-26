@@ -18,7 +18,7 @@ public class LED_test {
         DigitalOutput output = pi4j.create(config);
 
         System.out.println("Turning GPIO 21 ON ... ");
-        output.low();
+        output.high();
 
         Thread.sleep(5000);
 
