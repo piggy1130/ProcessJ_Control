@@ -61,7 +61,14 @@ public class Max31855Reader {
         public final int raw32;
         public final byte[] bytes;
         Reading(double tC, double iC, boolean f, boolean v, boolean g, boolean o, int raw, byte[] b) {
-            thermocoupleC = tC; internalC = iC; fault = f; scv = v; scg = g; oc = o; raw32 = raw; bytes = b;
+            thermocoupleC = tC; 
+            internalC = iC; 
+            fault = f; 
+            scv = v; 
+            scg = g; 
+            oc = o; 
+            raw32 = raw; 
+            bytes = b;
         }
         @Override public String toString() {
             String fs = fault ? String.format(" [FAULT scv=%b scg=%b oc=%b]", scv, scg, oc) : "";
@@ -74,8 +81,11 @@ public class Max31855Reader {
         try {
             for (int i = 0; i < 5; i++) {
                 Reading rd = r.readOnce();
+                double temp = rd.thermocoupleC;
                 System.out.println(rd);
-                Thread.sleep(500);
+                System.out.println("Current temperature = " + temp + " °C\n");
+                Thread.sleep(1500);
+
             }
         } finally {
             r.shutdown();
