@@ -5,7 +5,7 @@ import com.pi4j.io.gpio.digital.*;
 
 import java.nio.ByteBuffer;
 
-public class SPI {
+public class MAX31855_reader {
 
     /** Hardware SPI0 using hardware chip-select (CE0/CE1). */
     // if gpio pin = 8 -> CS0
