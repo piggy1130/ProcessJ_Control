@@ -8,12 +8,25 @@ import java.nio.ByteBuffer;
 public class SPI {
 
     /** Hardware SPI0 using hardware chip-select (CE0/CE1). */
-    public static double readTemp_HwCS(SpiChipSelect cs) throws Exception {
+    // if gpio pin = 8 -> CS0
+    // if gpio pin = 7 -> CS1
+    public static double readTemp_HwCS(int gpioPin) {
+
+        SpiChipSelect cs;
+        if (gpioPin == 8) {
+            cs = SpiChipSelect.CS_0;   // CE0
+        } else if (gpioPin == 7) {
+            cs = SpiChipSelect.CS_1;   // CE1
+        } else {
+            throw new IllegalArgumentException("Only GPIO7 (CE1) or GPIO8 (CE0) are valid hardware CS pins.");
+        }
+
         Context ctx = Pi4J.newAutoContext();
+
         try (Spi spi = ctx.create(
                 Spi.newConfigBuilder(ctx)
-                        .bus(SpiBus.BUS_0)          // SPI0
-                        .chipSelect(cs)             // CS_0 (GPIO8) or CS_1 (GPIO7)
+                        .bus(SpiBus.BUS_0)      // SPI0
+                        .chipSelect(cs)
                         .baud(5_000_000)
                         .mode(SpiMode.MODE_0)
                         .build())) {
@@ -21,20 +34,22 @@ public class SPI {
             byte[] rx = new byte[4];
             spi.read(rx);
             return decodeMax31855(rx);
+
         } finally {
             ctx.shutdown();
         }
     }
 
+
     /**
      * Hardware SPI0 (SCLK=GPIO11, MISO=GPIO9) but manual CS on any GPIO (e.g., GPIO16).
-     * IMPORTANT: requires SpiChipSelect.NONE in your Pi4J version.
-     * If NONE isn't available, set .chipSelect(SpiChipSelect.CS_1) and leave CE1 unconnected.
      */
-    public static double readTemp_HwSPI_ManualCS(int csGpio) throws Exception {
+    public static double readTemp_HwSPI_ManualCS(int csGpio) {
+
         Context ctx = Pi4J.newAutoContext();
         DigitalOutput cs = null;
         Spi spi = null;
+
         try {
             cs = ctx.create(DigitalOutput.newConfigBuilder(ctx)
                     .address(csGpio)
@@ -46,7 +61,7 @@ public class SPI {
 
             spi = ctx.create(Spi.newConfigBuilder(ctx)
                     .bus(SpiBus.BUS_0)               // SPI0: CLK=GPIO11, MISO=GPIO9
-                    .chipSelect(SpiChipSelect.CS_1)  // don't toggle CE0/CE1
+                    .chipSelect(SpiChipSelect.CS_1)  // prevent CE0/CE1 toggling
                     .baud(5_000_000)
                     .mode(SpiMode.MODE_0)
                     .build());
@@ -85,18 +100,25 @@ public class SPI {
         return ext14 * 0.25;
     }
 
-    public static void main(String[] args) throws Exception {
+    /** No "throws Exception" — errors handled internally */
+    public static void main(String[] args) {
+
         for (int i = 0; i < 5; i++) {
-            // Manual CS on GPIO16
-            double t_gpio16 = readTemp_HwSPI_ManualCS(16);
+            try {
+                // Manual CS on GPIO16
+                double t_gpio16 = readTemp_HwSPI_ManualCS(16);
 
-            // Hardware CS on CE0 (GPIO8)
-            double t_gpio8  = readTemp_HwCS(SpiChipSelect.CS_0);
+                // Hardware CS on CE0 (GPIO8)
+                double t_gpio8  = readTemp_HwCS(8);
 
-            System.out.printf("CE0(GPIO8) = %.2f °C%n", t_gpio8);
-            System.out.printf("GPIO16     = %.2f °C%n%n", t_gpio16);
+                System.out.printf("CE0(GPIO8) = %.2f °C%n", t_gpio8);
+                System.out.printf("GPIO16     = %.2f °C%n%n", t_gpio16);
 
-            Thread.sleep(1500);
+                Thread.sleep(1500);
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }
