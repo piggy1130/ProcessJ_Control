@@ -1,0 +1,14 @@
+import std.*;
+
+public void main(string[] args){
+
+    //for (int i=0; i<5; i++){
+        double temp_HWCS = readTemp_HwCS(8);
+        System.out.println(temp_HWCS);
+        //jl_print_2();
+        double temp_manualCS = readTemp_HwSPI_ManualCS(16);
+        System.out.println(temp_manualCS);
+  
+    //}
+    
+}

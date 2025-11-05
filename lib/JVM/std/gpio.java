@@ -51,4 +51,9 @@ public class gpio {
     public static void shutdown() {
         pi4j.shutdown();
     }
+
+    public static void jl_print(){
+        System.out.println("Jiaqi is testing....GPIO");
+    }
+
 }

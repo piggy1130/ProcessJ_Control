@@ -1,0 +1,10 @@
+#pragma LIBRARY;
+#pragma NATIVE;
+#pragma FILE "jlMAX31855reader";
+#pragma LANGUAGE "JVM";
+
+package std;
+
+public native double readTemp_HwCS(int gpioPin);
+public native double readTemp_HwSPI_ManualCS(int csGpio); 
+public native void jl_print_2();
